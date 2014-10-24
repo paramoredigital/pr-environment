@@ -14,9 +14,9 @@ __"get":__ Gets the current environment name. If an environment name is not conf
 
 ## Examples:
 _config.php:_
-`$conf['pr_env']['local'] = '127.0.0.1';`
+	$conf['pr_env']['local'] = '127.0.0.1';
 
 _template:_
-`{exp:env name="local"} [code] {/exp:env}`
-`{exp:env ip="127.0.0.1"} [code] {/exp:env}`
-`{exp:env:get}`
+	{exp:env name="local"} [code] {/exp:env}
+	{exp:env ip="127.0.0.1"} [code] {/exp:env}
+	{exp:env:get}
