@@ -18,14 +18,14 @@
  * @package ExpressionEngine
  * @subpackage Addons
  * @category Plugin
- * @author Ben Wilkins
+ * @author Ben Wilkins & Cameron West
  * @link http://paramoredigital.com
  */
 
 $plugin_info = array(
   'pi_name'        => 'PR Environment',
-  'pi_version'     => '1.0',
-  'pi_author'      => 'Ben Wilkins',
+  'pi_version'     => '1.1',
+  'pi_author'      => 'Ben Wilkins & Cameron West',
   'pi_author_url'  => 'http://paramoredigital.com',
   'pi_description' => 'Allows you to add environment-specific template code',
   'pi_usage'       => Env::usage()
@@ -81,7 +81,13 @@ class Env
 	 */
 	private function does_match_environment()
 	{
-		return (in_array($this->server_ip_address(), $this->environment_ip_addresses()));
+		$match = (in_array($this->server_ip_address(), $this->environment_ip_addresses()));
+
+        if (! $match) {
+           $match = (in_array($this->server_host(), $this->environment_hosts()));
+        }
+
+        return $match;
 	}
 
 	/**
@@ -103,6 +109,26 @@ class Env
 		  ? explode(self::DELIMITER, $this->config[$name])
 		  : explode(self::DELIMITER, ee()->TMPL->fetch_param('ip'));
 	}
+
+    /**
+     * @return string
+     */
+    private static function server_host()
+    {
+        return $_SERVER['SERVER_NAME'];
+    }
+
+    /**
+     * @return array
+     */
+    private function environment_hosts()
+    {
+        $name = ee()->TMPL->fetch_param('name');
+
+        return (isset($this->config[$name]))
+            ? explode(self::DELIMITER, $this->config[$name])
+            : explode(self::DELIMITER, ee()->TMPL->fetch_param('host'));
+    }
 
 	// ----------------------------------------------------------------
 
